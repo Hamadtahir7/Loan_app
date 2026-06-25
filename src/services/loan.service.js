@@ -1,4 +1,4 @@
-const { Loan } = require('../models');
+const { Loan } = require('../database/models');
 const NotFoundError = require('../errors/not-found.error');
 const ValidationError = require('../errors/validation.error');
 

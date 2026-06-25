@@ -1,42 +1,29 @@
 require('dotenv').config();
-
 const express = require('express');
 const cors = require('cors');
-
-const router = require('./src/routes/index');
-const { sequelize } = require('./src/models');
+const routes = require('./src/routes/index');
+const errorMiddleware = require('./src/middlewares/error.middleware');
+const db = require('./src/database/models');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use('/api', routes);
 
-app.use('/api', router);
-
-// 404 handler — catches any route that didn't match above
 app.use((req, res, next) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Global error handler — must stay last
-app.use((err, req, res, next) => {
-  const status = err.status || 500;
-  const message = err.message || 'Internal Server Error';
+app.use(errorMiddleware);
 
-  res.status(status).json({
-    message: message,
-    status: status
-  });
-});
-
-sequelize.authenticate()
+db.testConnection()
   .then(() => {
-    console.log('Database connection successful');
-    app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
     });
   })
-  .catch(err => {
-    console.error('Database connection failed:', err.message);
+  .catch(() => {
+    process.exit(1);
   });

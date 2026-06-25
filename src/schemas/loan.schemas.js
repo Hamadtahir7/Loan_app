@@ -5,7 +5,7 @@ const createLoanSchema = joi.object({
   loan_amount: joi.number().positive().required(),
   tenure_months: joi.number().integer().positive().required(),
   purpose: joi.string().max(255).required(),
-  
+  status: joi.string().valid('PENDING').optional()
 });
 
 const updateLoanSchema = joi.object({

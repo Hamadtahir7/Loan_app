@@ -1,50 +1,31 @@
 const service = require('../services/loan.service');
 const ValidationError = require('../errors/validation.error');
+const asyncHandler = require('../middlewares/async_handler.middlewear');
 
 class LoanController {
-    async getAllLoans(req, res, next) {
-        try {
-            const loans = await service.getAllLoans();
-            res.json(loans);
-        } catch (error) {
-            next(error);
-        }
-    }
+    getAllLoans = asyncHandler(async (req, res) => {
+        const loans = await service.getAllLoans();
+        res.json(loans);
+    });
 
-    async createLoan(req, res, next) {
-        try {
-            const loan = await service.createLoan(req.body);
-            res.status(201).json(loan);
-        } catch (error) {
-            next(new ValidationError(error.message));
-        }
-    }
+    createLoan = asyncHandler(async (req, res) => {
+        const loan = await service.createLoan(req.body);
+        res.status(201).json(loan);
+    });
+    getLoanById = asyncHandler(async (req, res) => {
+        const loan = await service.getLoanById(req.params.id);
+        res.json(loan);
+    }); 
+        
 
-    async getLoanById(req, res, next) {
-        try {
-            const loan = await service.getLoanById(req.params.id);
-            res.json(loan);
-        } catch (error) {
-            next(error);
-        }
-    }
+    updateLoan = asyncHandler(async (req, res, next) => {
+        const loan = await service.updateLoan(req.params.id, req.body);
+        res.json(loan);
+    });
 
-    async updateLoan(req, res, next) {
-        try {
-            const loan = await service.updateLoan(req.params.id, req.body);
-            res.json(loan);
-        }   catch (error) { 
-            next(new ValidationError(error.message));
-        }
-    }
-
-    async deleteLoan(req, res, next) {
-        try {
-            await service.deleteLoan(req.params.id);
-            res.status(204).end();
-        } catch (error) {
-            next(error);
-        }
-    }
+    deleteLoan = asyncHandler(async (req, res, next) => {
+        await service.deleteLoan(req.params.id);
+        res.status(204).end();
+    });
 }
 module.exports = new LoanController();
