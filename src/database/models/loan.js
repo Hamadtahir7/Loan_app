@@ -1,19 +1,24 @@
 'use strict';
+
 const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Loan extends Model {
     static associate(models) {
-      // define association here
-    }
+     Loan.belongsTo(models.User, {
+    foreignKey: 'user_id',
+    as: 'user'
+  });
+}
   }
+  
   Loan.init({
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      allowNull: false
+      allowNull: true
     },
     applicant_name: {
       type: DataTypes.STRING(100),
