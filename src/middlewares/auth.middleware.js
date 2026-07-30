@@ -1,21 +1,21 @@
-const jwt = require('jsonwebtoken');
+const jwt             = require('jsonwebtoken');
+const UnauthorizedError = require('../errors/unauthorized.error');
 
 const authMiddleware = (req, res, next) => {
-  // Extract token from Authorization header
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'No token provided' });
+    return next(new UnauthorizedError('No token provided'));
   }
 
   const token = authHeader.split(' ')[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // attach { userId, role } to every request
+    req.user = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Invalid or expired token' });
+    return next(new UnauthorizedError('Invalid or expired token'));
   }
 };
 

@@ -1,9 +1,9 @@
 const AppError = require('./app-error');
-const HTTP_status = require('../enums/http-status.enum');
+const HTTP_STATUS = require('../enums/http-status.enum');
 
 class NotFoundError extends AppError {
-  constructor(message = 'Not Found') {
-    super(message, HTTP_status.NOT_FOUND);
+  constructor(message = 'Resource not found') {
+    super(message, HTTP_STATUS.NOT_FOUND);
   }
 }
 

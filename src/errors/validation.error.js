@@ -1,9 +1,9 @@
 const AppError = require('./app-error');
-const HTTP_status = require('../enums/http-status.enum');
+const HTTP_STATUS = require('../enums/http-status.enum');
 
 class ValidationError extends AppError {
-  constructor(message = 'Validation Error') {
-    super(message, HTTP_status.BAD_REQUEST);
+  constructor(message = 'Validation failed') {
+    super(message, HTTP_STATUS.BAD_REQUEST);
   }
 }
 
