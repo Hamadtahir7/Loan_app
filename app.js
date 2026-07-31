@@ -9,11 +9,18 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: [
-    'http://localhost:3001',
-    'https://loan-frontend-black.vercel.app',
-    'https://loan-frontend-git-main-algorithm4.vercel.app'
-  ],
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    const allowed =
+      origin === 'http://localhost:3001' ||
+      origin === 'https://loan-frontend-black.vercel.app' ||
+      /^https:\/\/loan-frontend-[a-z0-9]+-algorithm4\.vercel\.app$/.test(origin);
+    if (allowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
