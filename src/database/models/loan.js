@@ -44,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Loan',
+    tableName: 'loans',
     timestamps: true,
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
